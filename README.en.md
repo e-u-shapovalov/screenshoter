@@ -55,6 +55,14 @@ Right-click the tray icon to:
 
 Double-clicking the tray icon starts region capture.
 
+## Screenshots
+
+Tray menu in Russian and English:
+
+![Screenshoter tray menu (Russian UI)](assets/tray-menu-ru.png)
+
+![Screenshoter tray menu (English UI)](assets/tray-menu-en.png)
+
 ## Build From Source
 
 ```powershell

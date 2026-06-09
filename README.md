@@ -81,13 +81,11 @@ Screenshoter решает простую задачу: сделать скрин
 
 ## Скриншоты интерфейса
 
-В репозитории пока нет демонстрационных изображений. Для страницы проекта стоит добавить:
+Меню в трее — русский и английский интерфейс:
 
-- `assets/region-capture.png` - выделение области на затемненном экране;
-- `assets/tray-menu.png` - меню в системном трее;
-- `assets/saved-notification.png` - уведомление после сохранения.
+![Меню Screenshoter в трее (русский интерфейс)](assets/tray-menu-ru.png)
 
-Когда файлы будут добавлены, этот раздел можно заменить на обычные Markdown-картинки.
+![Меню Screenshoter в трее (английский интерфейс)](assets/tray-menu-en.png)
 
 ## Кому подойдет
 
@@ -224,14 +222,6 @@ SDK .NET устанавливать не нужно, если этот комп�
 ## SEO: что это за инструмент
 
 Screenshoter - это легкий скриншотер для Windows, portable screenshot tool, программа для снимков экрана, утилита для скриншота области, инструмент для сохранения PNG и копирования пути к скриншоту. Проект полезен тем, кто ищет простой Windows screen capture tool без облака, регистрации и сложного интерфейса.
-
-## Релизы
-
-Текущий публичный релиз: [Screenshoter v1.0.0](https://github.com/e-u-shapovalov/screenshoter/releases/tag/v1.0.0).
-
-Готовый файл релиза: [Screenshoter.exe](https://github.com/e-u-shapovalov/screenshoter/releases/download/v1.0.0/Screenshoter.exe).
-
-История и рекомендации для публикации новых версий: [RELEASES.md](RELEASES.md).
 
 ## Лицензия и автор
 
