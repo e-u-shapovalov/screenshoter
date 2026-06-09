@@ -6,13 +6,13 @@ GitHub Releases - это место, где пользователи должн�
 
 ## Текущий релиз
 
-### Screenshoter v1.0.0
+### Screenshoter v1.0.1
 
 - Дата публикации: 2026-06-09.
-- Страница релиза: [Screenshoter v1.0.0](https://github.com/e-u-shapovalov/screenshoter/releases/tag/v1.0.0).
-- Готовый файл: [Screenshoter.exe](https://github.com/e-u-shapovalov/screenshoter/releases/download/v1.0.0/Screenshoter.exe).
-- Размер asset в релизе: 23552 bytes.
-- SHA256 asset `Screenshoter.exe` для `v1.0.0`: `5e46997214c217f6c0f0e036507b985cedce0f86f98adc4484d020c8cf3fc526`.
+- Страница релиза: [Screenshoter v1.0.1](https://github.com/e-u-shapovalov/screenshoter/releases/tag/v1.0.1).
+- Готовый файл: [Screenshoter.exe](https://github.com/e-u-shapovalov/screenshoter/releases/download/v1.0.1/Screenshoter.exe).
+- Размер asset в релизе: 30208 bytes.
+- SHA256 asset `Screenshoter.exe` для `v1.0.1`: `7e4499f8b456e3a4070ad5a09cb6228f95a86fcb4d927edc1cb75e6162e36d82`.
 
 Для обычного пользователя нужен именно `Screenshoter.exe`. Архивы `Source code (zip)` и `Source code (tar.gz)` GitHub добавляет автоматически; они нужны разработчикам.
 
