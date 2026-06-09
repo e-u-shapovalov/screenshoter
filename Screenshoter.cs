@@ -19,8 +19,8 @@ using System.Windows.Forms;
 [assembly: AssemblyDescription("Скриншот области/экрана: сохраняет PNG и кладёт путь к файлу в буфер обмена")]
 [assembly: AssemblyCompany("Evgenii Shapovalov")]
 [assembly: AssemblyCopyright("© 2026 Evgenii Shapovalov")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.1.0")]
+[assembly: AssemblyFileVersion("1.0.1.0")]
 
 namespace Screenshoter
 {
