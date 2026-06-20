@@ -1,6 +1,6 @@
 # Screenshoter - fast Windows screenshot tool
 
-**Screenshoter** is a lightweight Windows tray app for quick screenshots. It captures a selected region or the monitor under your cursor, saves a PNG file, and puts **both the image and the file path** on the clipboard.
+**Screenshoter** is a lightweight Windows tray app for quick screenshots. It captures a selected region (optionally with a countdown delay so you can catch a tooltip before it vanishes), saves a PNG file, and puts **both the image and the file path** on the clipboard.
 
 It is built for people who need screenshots in chats, bug reports, documentation, terminals, Markdown files, IDEs, support tools, and issue trackers without opening a heavy editor or uploading anything to the cloud.
 
@@ -19,17 +19,19 @@ Do **not** use `Code -> Download ZIP` if you only want to run the app. That down
 2. Put it into any folder you like.
 3. Run it.
 4. Find the Screenshoter icon in the Windows system tray.
-5. Press `Ctrl+Shift+1` to capture a region, or `Ctrl+Shift+3` to capture the monitor under the cursor.
-6. Press `Ctrl+V` where you need the result. Image-friendly apps will paste the screenshot; text fields and terminals usually paste the saved file path.
+5. Press `Ctrl+Shift+1` to capture a region, or `Ctrl+Shift+3` for a delayed capture with a countdown.
+6. Press `Ctrl+V` where you need the result. Image-friendly apps will paste the screenshot; text fields and terminals usually paste the saved file path. If an app pastes the path instead of the image, press `Ctrl+Shift+2` to drop the path and keep only the picture.
 
 No installer and no admin rights are required. Windows SmartScreen may warn because the binary is unsigned. If you trust this repository, choose **More info** and then **Run anyway**, or build the executable yourself.
 
 ## Features
 
 - Region screenshot with `Ctrl+Shift+1`.
-- Monitor screenshot with `Ctrl+Shift+3`.
+- Delayed capture with a countdown: `Ctrl+Shift+3` — select an area, set the seconds, hover the element and let the timer fire. Perfect for catching tooltips and hover popups that disappear on click or key press.
+- Clipboard path toggle: `Ctrl+Shift+2` — drop the file path so only the image stays on the clipboard (handy for chats like WhatsApp or ChatGPT that paste the path instead of the picture), then bring it back without taking a new shot.
 - Timestamped PNG files.
 - Clipboard contains both the bitmap image and the saved file path.
+- A short flash highlights the captured area.
 - Configurable screenshots folder.
 - Optional startup shortcut.
 - Russian and English UI.
@@ -45,7 +47,8 @@ Screenshoter is not an image editor, OCR tool, video recorder, cloud uploader, o
 Right-click the tray icon to:
 
 - capture a region;
-- capture the current monitor;
+- capture with a delay (countdown);
+- toggle the file path in the clipboard;
 - open the screenshots folder;
 - change the screenshots folder;
 - add or remove the app from Windows startup;

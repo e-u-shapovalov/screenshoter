@@ -19,7 +19,8 @@ C:\Users\<ваше_имя>\Apps\Screenshoter\Screenshoter.exe
 ## Запуск
 
 - `Ctrl+Shift+1` - снимок области.
-- `Ctrl+Shift+3` - снимок монитора под курсором.
+- `Ctrl+Shift+3` - снимок с задержкой: выделите область, укажите секунды, наведите курсор — по окончании обратного отсчёта область снимется сама.
+- `Ctrl+Shift+2` - переключить путь в буфере для последнего снимка: убрать путь (оставить только картинку для чатов) или вернуть его обратно.
 - Двойной клик по значку в трее - снимок области.
 - Правая кнопка по значку в трее - меню программы.
 
@@ -129,6 +130,6 @@ C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe
 
 ## English Quick Install
 
-Download the ready-made executable from [GitHub Releases](https://github.com/e-u-shapovalov/screenshoter/releases/latest), run `Screenshoter.exe`, then use `Ctrl+Shift+1` for a region screenshot or `Ctrl+Shift+3` for the monitor under the cursor.
+Download the ready-made executable from [GitHub Releases](https://github.com/e-u-shapovalov/screenshoter/releases/latest), run `Screenshoter.exe`, then use `Ctrl+Shift+1` for a region screenshot or `Ctrl+Shift+3` for a delayed capture with a countdown.
 
 Do not download `Source code` unless you want to build the project yourself.
