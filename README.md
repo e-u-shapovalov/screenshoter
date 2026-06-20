@@ -88,9 +88,9 @@ Screenshoter решает простую задачу: сделать скрин
 
 Меню в трее — русский и английский интерфейс:
 
-![Меню Screenshoter в трее (русский интерфейс)](assets/tray-menu-ru.png)
+![Меню Screenshoter в трее (русский интерфейс)](assets/tray-menu-ru-v1.1.0.png)
 
-![Меню Screenshoter в трее (английский интерфейс)](assets/tray-menu-en.png)
+![Меню Screenshoter в трее (английский интерфейс)](assets/tray-menu-en-v1.1.0.png)
 
 ## Кому подойдет
 

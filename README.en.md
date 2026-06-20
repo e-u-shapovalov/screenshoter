@@ -62,9 +62,9 @@ Double-clicking the tray icon starts region capture.
 
 Tray menu in Russian and English:
 
-![Screenshoter tray menu (Russian UI)](assets/tray-menu-ru.png)
+![Screenshoter tray menu (Russian UI)](assets/tray-menu-ru-v1.1.0.png)
 
-![Screenshoter tray menu (English UI)](assets/tray-menu-en.png)
+![Screenshoter tray menu (English UI)](assets/tray-menu-en-v1.1.0.png)
 
 ## Build From Source
 
