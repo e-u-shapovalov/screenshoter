@@ -26,7 +26,7 @@ No installer and no admin rights are required. Windows SmartScreen may warn beca
 
 ## Features
 
-- Region screenshot with `Ctrl+Shift+1`.
+- Region screenshot with `Ctrl+Shift+1`. The selection overlay shows a bright yellow crosshair cursor (clearly visible over the dimmed background) and snaps to edges: the frame magnetizes to the nearest color boundary under the cursor, so you can line up buttons, windows, and blocks precisely.
 - Delayed capture with a countdown: `Ctrl+Shift+3` — select an area, set the seconds, hover the element and let the timer fire. Perfect for catching tooltips and hover popups that disappear on click or key press.
 - Clipboard path toggle: `Ctrl+Shift+2` — drop the file path so only the image stays on the clipboard (handy for chats like WhatsApp or ChatGPT that paste the path instead of the picture), then bring it back without taking a new shot.
 - Timestamped PNG files.

@@ -23,8 +23,8 @@ using System.Windows.Forms;
 [assembly: AssemblyDescription("Скриншот области/экрана: сохраняет PNG и кладёт путь к файлу в буфер обмена")]
 [assembly: AssemblyCompany("Evgenii Shapovalov")]
 [assembly: AssemblyCopyright("© 2026 Evgenii Shapovalov")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 namespace Screenshoter
 {
@@ -742,6 +742,15 @@ namespace Screenshoter
         Point start;
         Rectangle sel;
         bool dragging;
+        Point cursorPt = new Point(-1, -1); // позиция для самодельного перекрестья
+        static readonly Color CrossColor = Color.FromArgb(255, 220, 0); // яркий жёлтый — виден на затемнении
+
+        // Пиксельный edge-snap: держим копию пикселей замороженного скриншота, чтобы
+        // в рантайме под курсором искать ближайшую границу цвета и притягивать к ней.
+        int[] pixels;
+        int pw, ph;
+        const int EdgeR = 6;        // радиус поиска грани вокруг курсора, px
+        const int EdgeThresh = 60;  // мин. суммарный перепад RGB, чтобы считать это гранью
 
         public Rectangle Selection { get { return sel; } }
 
@@ -760,7 +769,6 @@ namespace Screenshoter
             ShowInTaskbar = false;
             DoubleBuffered = true;
             KeyPreview = true;
-            Cursor = Cursors.Cross;
             BackColor = Color.Black;
             SetStyle(ControlStyles.OptimizedDoubleBuffer
                    | ControlStyles.AllPaintingInWmPaint
@@ -775,6 +783,60 @@ namespace Screenshoter
                 using (SolidBrush b = new SolidBrush(Color.FromArgb(120, 0, 0, 0)))
                     g.FillRectangle(b, 0, 0, shot.Width, shot.Height);
             }
+
+            // Копируем пиксели скриншота в массив — быстрый доступ для поиска граней.
+            pw = shot.Width; ph = shot.Height;
+            pixels = new int[pw * ph];
+            BitmapData bd = shot.LockBits(new Rectangle(0, 0, pw, ph),
+                ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            Marshal.Copy(bd.Scan0, pixels, 0, pixels.Length);
+            shot.UnlockBits(bd);
+        }
+
+        // Притягиваем точку к ближайшей цветовой границе по каждой оси отдельно.
+        // Если рядом нет выраженной грани — координата остаётся как есть (без насилия).
+        Point Snap(Point p)
+        {
+            return new Point(SnapX(p.X, p.Y), SnapY(p.X, p.Y));
+        }
+
+        static int Diff(int a, int b)
+        {
+            return Math.Abs(((a >> 16) & 0xFF) - ((b >> 16) & 0xFF))
+                 + Math.Abs(((a >> 8) & 0xFF) - ((b >> 8) & 0xFF))
+                 + Math.Abs((a & 0xFF) - (b & 0xFF));
+        }
+
+        // столбец с сильнейшим вертикальным перепадом возле курсора (усреднён по 3 строкам)
+        int SnapX(int cx, int cy)
+        {
+            if (pixels == null || cy < 1 || cy >= ph - 1) return cx;
+            int best = cx, bestD = EdgeThresh;
+            for (int x = cx - EdgeR; x <= cx + EdgeR; x++)
+            {
+                if (x < 1 || x >= pw) continue;
+                int d = 0;
+                for (int y = cy - 1; y <= cy + 1; y++)
+                    d += Diff(pixels[y * pw + x], pixels[y * pw + x - 1]);
+                if (d > bestD) { bestD = d; best = x; }
+            }
+            return best;
+        }
+
+        // строка с сильнейшим горизонтальным перепадом возле курсора (усреднена по 3 столбцам)
+        int SnapY(int cx, int cy)
+        {
+            if (pixels == null || cx < 1 || cx >= pw - 1) return cy;
+            int best = cy, bestD = EdgeThresh;
+            for (int y = cy - EdgeR; y <= cy + EdgeR; y++)
+            {
+                if (y < 1 || y >= ph) continue;
+                int d = 0;
+                for (int x = cx - 1; x <= cx + 1; x++)
+                    d += Diff(pixels[y * pw + x], pixels[(y - 1) * pw + x]);
+                if (d > bestD) { bestD = d; best = y; }
+            }
+            return best;
         }
 
         protected override void OnShown(EventArgs e)
@@ -782,6 +844,9 @@ namespace Screenshoter
             base.OnShown(e);
             Activate();
             Focus();
+            Cursor.Hide(); // прячем системный курсор — рисуем свой яркий крест
+            cursorPt = Snap(PointToClient(MousePosition)); // крест виден сразу, до первого движения
+            Invalidate();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -791,22 +856,39 @@ namespace Screenshoter
             {
                 Capture = true; // держим мышь, даже если фокус украдут/курсор уедет
                 dragging = true;
-                start = e.Location;
-                sel = new Rectangle(e.Location, Size.Empty);
+                start = Snap(e.Location); // начало берём с найденной грани
+                cursorPt = start;
+                sel = new Rectangle(start, Size.Empty);
                 Invalidate();
             }
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (!dragging) return;
-            Rectangle prev = sel;
-            sel = Norm(start, e.Location);
-            // перерисовываем только изменившуюся полосу вокруг рамки (+ запас на бордюр и подпись)
-            Rectangle dirty = Rectangle.Union(prev, sel);
-            dirty.Inflate(60, 60);
-            Invalidate(dirty);
+            // самодельное перекрестье: гасим старые полосы креста и рисуем новые
+            Point snapped = Snap(e.Location);
+            Point prevCur = cursorPt;
+            cursorPt = snapped;
+            if (prevCur.X >= 0) InvalidateCross(prevCur);
+            InvalidateCross(cursorPt);
+
+            if (dragging)
+            {
+                Rectangle prev = sel;
+                sel = Norm(start, snapped);
+                // перерисовываем только изменившуюся полосу вокруг рамки (+ запас на бордюр и подпись)
+                Rectangle dirty = Rectangle.Union(prev, sel);
+                dirty.Inflate(60, 60);
+                Invalidate(dirty);
+            }
             Update();
+        }
+
+        // полосы во всю ширину/высоту, проходящие через точку — область, которую трогает крест
+        void InvalidateCross(Point p)
+        {
+            Invalidate(new Rectangle(0, p.Y - 1, Width, 3));
+            Invalidate(new Rectangle(p.X - 1, 0, 3, Height));
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -815,7 +897,7 @@ namespace Screenshoter
             {
                 Capture = false;
                 dragging = false;
-                sel = Norm(start, e.Location);
+                sel = Norm(start, Snap(e.Location));
                 DialogResult = (sel.Width > 2 && sel.Height > 2)
                     ? DialogResult.OK : DialogResult.Cancel;
                 Close();
@@ -825,6 +907,12 @@ namespace Screenshoter
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) { DialogResult = DialogResult.Cancel; Close(); }
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            Cursor.Show(); // возвращаем системный курсор (баланс к Cursor.Hide())
+            base.OnFormClosed(e);
         }
 
         static Rectangle Norm(Point a, Point b)
@@ -862,6 +950,14 @@ namespace Screenshoter
                     g.DrawString(label, f, fg, lx + 4, ly + 1);
                 }
             }
+
+            // самодельное перекрестье поверх всего — яркое, видно на затемнении
+            if (cursorPt.X >= 0)
+                using (Pen cross = new Pen(CrossColor, 1))
+                {
+                    g.DrawLine(cross, 0, cursorPt.Y, Width, cursorPt.Y);
+                    g.DrawLine(cross, cursorPt.X, 0, cursorPt.X, Height);
+                }
         }
 
         // подсказка-плашка вверху по центру — видна, пока выделяешь
